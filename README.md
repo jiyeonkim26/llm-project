@@ -9,7 +9,9 @@ A command-line chatbot that responds in pirate-themed language and maintains sim
 
 ```bash
 pip install cmc_csci040_JiyeonKim
+
 chat
+
 chat> I am Bob.
 Arrr, ye be Bob, eh?
 chat> What is my name?
