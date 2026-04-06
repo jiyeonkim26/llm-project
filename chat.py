@@ -21,7 +21,7 @@ class Chat:
     chat> Hello, I am monkey.
     Arrr, ye be a mischievous little monkey, eh? Yer chatterin' be music to me ears, matey!
     chat> Goodbye.
-    Farewell, little monkey, may the winds o' fortune blow in yer favor!
+    Farewell, me scurvy monkey friend, may the winds o' fortune blow in yer favor!
     <BLANKLINE>
 
     >>> chat = Chat()
@@ -32,7 +32,7 @@ class Chat:
 
     >>> chat2 = Chat()
     >>> chat2.send_message('what is my name?', temperature=0.0)
-    "Arrr, I be not aware o' yer name, matey. Yer identity be a mystery to me."
+    "Arrr, I be not aware o' yer name, matey."
     '''
     client = Groq()
     def __init__(self):
