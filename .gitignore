@@ -1,9 +1,21 @@
+# secrets
 .env
-venv
-__pycache__.env
-*.env
-.env
-.coverage
+
+# Python cache
 __pycache__/
-*.pyc
-.DS_Store
+*.py[cod]
+
+# virtual environments
+.venv/
+venv/
+env/
+
+# packaging/build artifacts
+build/
+dist/
+*.egg-info/
+
+# test/cache tools
+.pytest_cache/
+.coverage
+htmlcov/

@@ -5,26 +5,37 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+
 jobs:
-    env: 
+  tests:
+    runs-on: ubuntu-latest
+
+    env:
       GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+
     steps:
-      - name: tests
-        on:
-          push:
-            branches: ['*']
-        jobs:
-          tests:
-            strategy:
-              matrix:
-                python: [3.11]
-            runs-on: ubuntu-latest
-            steps:
-              - uses: actions/checkout@v2
-              - name: Set up Python ${{matrix.python}}
-                uses: actions/setup-python@v2
-                with:
-                  python-version: ${{matrix.python}}
-              - name: Run tests
-                run: |
-                  python -m doctest --verbose chat.python
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine pytest
+          pip install -e .
+
+      - name: Run doctests
+        run: |
+          python -m pytest --doctest-modules chat.py
+
+      - name: Build package
+        run: |
+          python -m build
