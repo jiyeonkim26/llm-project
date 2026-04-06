@@ -3,7 +3,11 @@
 <img src="https://github.com/jiyeonkim26/llm-project/actions/workflows/test.yaml/badge.svg" /> <img src="https://github.com/jiyeonkim26/llm-project/actions/workflows/integration.yaml/badge.svg" />
 
 
-A command-line chatbot that responds in pirate-themed language and maintains simple conversational context. Built for testing LLM-style interactions with reproducible doctests and integration tests.
+A command-line chatbot that responds in pirate-themed language and maintains simple conversational context. 
+
+Here is a link to the PyPI package: https://pypi.org/manage/project/cmc-csci040-JiyeonKim/releases/. 
+
+Here is a link to the project instructions: https://github.com/mikeizbicki/lab-more-project-setup/tree/28cf5f3f4817e25930a39d2353e1cc1836e68026
 
 ## Installation
 
