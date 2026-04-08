@@ -1,12 +1,12 @@
 # pyproject.toml
 
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=61.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "cmc-csci040-JiyeonKim"
-version = "0.1.0"
+version = "0.1.1"
 description = "A pirate-style CLI chat app using the Groq API"
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.10"
