@@ -12,8 +12,8 @@ Here is a link to the project instructions: https://github.com/mikeizbicki/lab-m
 ## Installation
 
 ```bash
-pip install cmc_csci040_JiyeonKim
-chat
+$ pip install cmc_csci040_JiyeonKim
+$ chat
 chat> I am Bob.
 Arrr, ye be Bob, eh?
 chat> What is my name?
