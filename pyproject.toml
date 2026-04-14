@@ -6,8 +6,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cmc-csci040-JiyeonKim"
-version = "0.1.1"
-description = "A pirate-style CLI chat app using the Groq API"
+version = "0.1.2"
+description = "A CLI chat app using the Groq API"
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.10"
 dependencies = [
@@ -20,3 +20,7 @@ chat = "chat:repl"
 
 [tool.setuptools]
 py-modules = ["chat"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["tools*"]
