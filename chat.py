@@ -21,9 +21,9 @@ class Chat:
    >>> builtins.input = monkey_input
    >>> repl(temperature=0.0)
    chat> Hello, I am monkey.
-   Nice to meet you, Monkey! How can I help you today?
+   Nice to meet you, monkey! How can I help you today?
    chat> Goodbye.
-   Take care and have a great day!
+   Goodbye! Feel free to return anytime you need assistance.
    <BLANKLINE>
    '''
    '''
