@@ -8,7 +8,7 @@ A command-line chatbot that maintains simple conversational context. This projec
 Here is a link to the PyPI package: https://pypi.org/project/cmc-csci040-JiyeonKim/. 
 
 To check code coverage for the tools:
-'''
+```
 $ coverage run -m doctest -v tools/*.py
 $ coverage report -m
-'''
+```
