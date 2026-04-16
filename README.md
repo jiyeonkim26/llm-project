@@ -13,4 +13,4 @@ $ coverage run -m doctest -v tools/*.py
 $ coverage report -m
 ```
 
-![chat demo](chatdemo.gif)
+![chat demo](demo.gif)
