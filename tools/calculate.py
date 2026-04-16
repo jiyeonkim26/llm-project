@@ -1,30 +1,42 @@
 import json
 
+
 def calculate(expression):
-    """Evaluate a mathematical expression"""
+    '''
+    This tool evaluates a mathematical expression.
+
+    >>> calculate("3 + 2")
+    '{"result": 5}'
+
+    >>> calculate("10 / 2")
+    '{"result": 5.0}'
+
+    >>> calculate("j")
+    '{"error": "Invalid expression"}'
+    '''
     try:
         result = eval(expression)  # Use safe evaluation in production
         return json.dumps({"result": result})
-    except:
+    except Exception:
         return json.dumps({"error": "Invalid expression"})
 
-tool_schema = {
-  "type": "function",
-  "function": {
-    "name": "calculate",
-    "description": "Evaluate a mathematical expression",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "expression": {
-          "type": "string",
-          "description": "The mathematical expression to evaluate"
-        }
-      },
-      "required": ["expression"]
-    }
-  }
-}
 
+tool_schema = {
+    "type": "function",
+    "function": {
+        "name": "calculate",
+        "description": "Evaluate a mathematical expression",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "expression": {
+                    "type": "string",
+                    "description": "The mathematical expression to evaluate",
+                }
+            },
+            "required": ["expression"],
+        },
+    },
+}
 
 # tool file is always going to have one python function and tool schema

@@ -3,48 +3,52 @@
 # step 3: get the function to pass doctest
 # step 3b: may have to modify doctests to get them to pass
 # step 4: you know you have enough doctests if you have 100% code coverage
-
-
 import glob
 
 
 def ls(folder=None):
-   '''
-   This function behaves just like the ls program in the shell.
-   >>> ls()
-   'README.md __pycache__ build chat.py cmc_cs040_JiyeonKim.egg-info dist htmlcov pyproject.toml requirements.txt tools venv'
-   >>> ls('tools')
-   'tools/__pycache__ tools/ls.py '
-   '''
-   if folder:
-       result = ''
-       # folder + '/' ==> tools
-       # glob is non deterministic; no guarantee about order of glob results
-       # need to convert nondeterministic to deterministic
-       for path in sorted(glob.glob(folder + '/*')):
-           result += path + ' '
-       return result
-   else:
-       result = ''
-       for path in sorted(glob.glob('*')):
-           result += path + ' '
-       return result.strip()
+    """
+    This function behaves just like the ls program in the shell.
+
+    >>> ls()
+    'README.md __pycache__ chat.py cmc_csci040_JiyeonKim.egg-info dist example.txt example_utf16.txt htmlcov ls.json pyproject.toml reader-whl requirements.txt test_projects tools tutorial.py venv'
+
+    >>> ls('tools')
+    'tools/__init__.py tools/__pycache__ tools/calculate.py tools/cat.py tools/grep.py tools/ls.py '
+    """
+    if folder:
+        result = ""
+
+        # glob is nondeterministic; sort for consistent output
+        for path in sorted(glob.glob(folder + "/*")):
+            result += path + " "
+
+        return result
+
+    result = ""
+
+    for path in sorted(glob.glob("*")):
+        result += path + " "
+
+    return result.strip()
 
 
 tool_schema = {
-  "type": "function",
-  "function": {
-    "name": "ls",
-    "description": "List out the files in the current folder or the folder of the argument raised",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "expression": {
-          "type": "string",
-          "description": "The folder to list files"
-        }
-      },
-      "required": ["expression"]
-    }
-  }
+    "type": "function",
+    "function": {
+        "name": "ls",
+        "description": (
+            "List the files in the current folder or in the specified folder"
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "folder": {
+                    "type": "string",
+                    "description": "The folder to list files",
+                }
+            },
+            "required": ["folder"],
+        },
+    },
 }

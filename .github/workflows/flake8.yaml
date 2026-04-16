@@ -1,0 +1,29 @@
+name: flake8
+
+on:
+  push:
+    branches: ['*']
+
+jobs:
+  lint:
+    strategy:
+      matrix:
+        python: [3.11]
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Run flake8
+        run: |
+          pip install -r requirements.txt
+          pip install flake8
+          flake8 . \
+            --ignore=E501 \
+            --exclude=.venv,venv,__pycache__,.git
