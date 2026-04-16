@@ -1,5 +1,6 @@
 import json
 import os
+import readline
 from groq import Groq
 from tools.calculate import calculate, tool_schema as calculate_schema
 from tools.ls import ls, tool_schema as ls_schema
@@ -118,14 +119,6 @@ class Chat:
                         function_args["path"]
                     )
 
-                print(f"[tool] function_name={function_name}, function_args={function_args}")
-                if function_name == "cat":
-                    self.messages.append({
-                        "role": "assistant",
-                        "content": function_response
-                    })
-                    return function_response
-
                 # Add tool response to conversation
                 self.messages.append({
                     "tool_call_id": tool_call.id,
@@ -137,8 +130,11 @@ class Chat:
             # Step 4: Get final response from model
             second_response = self.client.chat.completions.create(
                 model=self.MODEL,
-                messages=self.messages
+                messages=self.messages,
+                tools=tools,
+                tool_choice="auto",
             )
+
             result = second_response.choices[0].message.content
             self.messages.append({
                 'role': 'assistant',
@@ -184,7 +180,7 @@ def repl(temperature=0.0):
     >>> builtins.input = monkey_input
     >>> repl(temperature=0.0)
     chat> /ls
-    README.md __pycache__ chat.py chatdemo.gif cmc_csci040_JiyeonKim.egg-info demo.gif example.txt example_utf16.txt pyproject.toml requirements.txt test_projects tools
+    README.md __pycache__ chat.py cmc_csci040_JiyeonKim.egg-info demo.gif example.txt example_utf16.txt pyproject.toml requirements.txt test_projects tools
     chat> /calculate 2 + 2
     {"result": 4}
     chat> /cat example.txt
@@ -195,6 +191,7 @@ def repl(temperature=0.0):
     hello world
     <BLANKLINE>
     '''
+    readline.parse_and_bind("tab: complete")
     chat = Chat()
 
     available_functions = {
