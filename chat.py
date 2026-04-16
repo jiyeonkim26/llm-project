@@ -26,7 +26,7 @@ class Chat:
     chat> Hello, I am monkey.
     Nice to meet you, monkey! How can I assist you today?
     chat> Goodbye.
-    Goodbye! Feel free to return anytime you need assistance.
+    Goodbye! Feel free to return anytime.
     <BLANKLINE>
     '''
     '''
