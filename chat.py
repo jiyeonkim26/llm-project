@@ -183,7 +183,7 @@ def repl(temperature=0.0):
     >>> builtins.input = monkey_input
     >>> repl(temperature=0.0)
     chat> /ls
-    README.md __pycache__ chat.py cmc_csci040_JiyeonKim.egg-info example.txt example_utf16.txt pyproject.toml requirements.txt test_projects tools
+    README.md __pycache__ chat.py chatdemo.gif cmc_csci040_JiyeonKim.egg-info demo.gif example.txt example_utf16.txt pyproject.toml requirements.txt test_projects tools
     chat> /calculate 2 + 2
     {"result": 4}
     chat> /cat example.txt
