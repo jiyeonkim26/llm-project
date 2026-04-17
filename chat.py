@@ -24,9 +24,9 @@ class Chat:
     >>> builtins.input = monkey_input
     >>> repl(temperature=0.0)
     chat> Hello, I am monkey.
-    Nice to meet you, monkey! How can I assist you today?
+    Nice to meet you, monkey! How can I help you today?
     chat> Goodbye.
-    Goodbye! Feel free to return anytime.
+    Goodbye! Feel free to return anytime you need assistance.
     <BLANKLINE>
     '''
     '''
@@ -269,7 +269,7 @@ def repl(temperature=0.0):
         print()
 
     except Exception as e:
-            print(f"Unexpected error: {e}")
+        print(f"Unexpected error: {e}")
 
 
 if __name__ == '__main__':
