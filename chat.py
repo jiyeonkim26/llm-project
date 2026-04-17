@@ -173,7 +173,7 @@ def repl(temperature=0.0):
     >>> builtins.input = monkey_input
     >>> repl(temperature=0.0)
     chat> /ls doctest_examples
-    doctest_examples/example.txt doctest_examples/example_utf16.txt 
+    doctest_examples/example.txt doctest_examples/example_utf16.txt
     chat> /calculate 2 + 2
     {"result": 4}
     chat> /cat doctest_examples/example.txt
