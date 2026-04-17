@@ -10,6 +10,10 @@ def cat(filename):
     >>> cat("does_not_exist.txt")
     "Error: [Errno 2] No such file or directory: 'does_not_exist.txt'"
 
+    # these are all excellent test cases that you have;
+    # good job writing them;
+    # it is unfortunate that your doctests don't actually run them :(
+    # (I do believe they at least mostly work though)
     >>> print(cat("doctest_examples/example_utf16.txt"))
     hello world
 
