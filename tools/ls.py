@@ -14,7 +14,7 @@ def ls(folder=None):
     This tool behaves just like the ls program in the shell.
 
     >>> ls()
-    'README.md __pycache__ chat.py cmc_csci040_JiyeonKim.egg-info dist doctest_examples htmlcov ls.json pyproject.toml reader-whl requirements.txt test_projects tools tutorial.py venv'
+    'README.md __pycache__ chat.py cmc_csci040_JiyeonKim.egg-info coverage.xml demo.gif doctest_examples pyproject.toml requirements.txt test_projects tools'
 
     >>> ls('tools')
     'tools/__init__.py tools/__pycache__ tools/calculate.py tools/cat.py tools/grep.py tools/ls.py '
