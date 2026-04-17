@@ -16,6 +16,10 @@ def ls(folder=None):
     >>> ls('doesnotexist')
     ''
 
+    >>> output = ls()
+    >>> "chat.py" in output
+    True
+
     >>> ls('tools')
     'tools/__init__.py tools/__pycache__ tools/calculate.py tools/cat.py tools/grep.py tools/ls.py '
     """
