@@ -6,17 +6,17 @@
 This is a command-line chatbot that maintains simple conversational context. This project uses GROQ to create a text-based AI assistant. 
 
 Here is a link to the PyPI package: https://pypi.org/project/cmc-csci040-JiyeonKim/. 
-### TO INSTALL THE PACKAGE:
+### To install the package:
 ```
 $ pip install cmc-csci040-JiyeonKim
 $ chat
 chat>
 ```
 
-### Animated GIF example of the chat program.
+### Animated GIF example of the chat program:
 ![chat demo](demo.gif)
 
-### Personal Webpage Example
+### Personal Webpage Example:
 ```
 $ cd test_projects/jiyeonkim26.github.io
 $ chat
@@ -24,7 +24,7 @@ chat> what files are in this project?
 The project contains the following files: README.md, about.html, index.html, projects.html, and styles.css.
 ```
 
-### Markdown Compiler Example
+### Markdown Compiler Example:
 ```
 $ cd test_projects/markdown_compiler
 $ chat
@@ -32,7 +32,7 @@ chat> does this project use regex?
 The codebase does not import or use the `re` module; all markdown parsing is done with plain string operations rather than regular expressions.
 ```
 
-### Webscraping eBay Example
+### Webscraping eBay Example:
 ```
 $ cd test_projects/webscraping-ebay
 $ chat
@@ -42,7 +42,7 @@ chat> is this legal?
 Web scraping is generally legal in the United States as long as you respect the site’s terms of service, do not bypass technical barriers, and use the data only for permissible purposes; however, eBay’s terms may restrict automated data collection, so you should review their policies and possibly obtain permission before running the script at scale.
 ```
 
-To check code coverage for the tools and `chat.py`:
+### To check code coverage for the tools and `chat.py`:
 ```
 $ coverage run -m doctest -v tools/*.py chat.py
 $ coverage report -m
