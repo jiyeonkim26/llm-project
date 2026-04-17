@@ -18,5 +18,5 @@ dist/
 # test/cache tools
 .pytest_cache/
 .coverage
-htmlcov/reader-whl
+htmlcov/
 reader-whl

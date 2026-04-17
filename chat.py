@@ -258,8 +258,8 @@ def repl(temperature=0.0):
                         "content": result
                     })
 
-                except Exception:
-                    print("")
+                except Exception as e:
+                    print(f"Unexpected error: {e}")
                 continue
 
             response = chat.send_message(user_input, temperature=temperature)
@@ -267,6 +267,9 @@ def repl(temperature=0.0):
 
     except (KeyboardInterrupt, EOFError):
         print()
+
+    except Exception as e:
+            print(f"Unexpected error: {e}")
 
 
 if __name__ == '__main__':
