@@ -25,6 +25,5 @@ jobs:
           pip install -r requirements.txt
           pip install flake8
           flake8 . \
-            --ignore=E501 \
-            --ignore=W291 \
+            --ignore=E501,W291 \
             --exclude=.venv,venv,__pycache__,.git
