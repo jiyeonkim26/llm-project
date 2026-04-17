@@ -1,3 +1,6 @@
+'''
+ls.py defines the function that allows the ls tool to be called and used by chat.py.
+'''
 # step 1: create function wiht the right number of args; write the docstring
 # step 2: create the doctests for that function
 # step 3: get the function to pass doctest

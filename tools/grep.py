@@ -1,3 +1,6 @@
+'''
+cat.py defines the function that allows the grep tool to be called and used by chat.py.
+'''
 import glob
 import os
 import re

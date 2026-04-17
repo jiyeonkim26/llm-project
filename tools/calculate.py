@@ -1,3 +1,6 @@
+'''
+calculate.py defines the function that allows the calculate tool to be called and used by chat.py.
+'''
 import json
 
 
