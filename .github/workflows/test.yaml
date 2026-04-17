@@ -39,3 +39,11 @@ jobs:
       - name: Build package
         run: |
           python -m build
+
+      - name: Run tests with coverage
+        run: |
+          coverage run -m pytest --doctest-modules
+          coverage xml
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v4
