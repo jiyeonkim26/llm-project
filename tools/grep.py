@@ -10,15 +10,6 @@ def grep(regex, path):
     '''
     This tool searches every file matching a glob path and return lines that match regex.
 
-    >>> print(grep("append", "chat.py"))
-            self.messages.append(
-                self.messages.append(response_message)
-                    self.messages.append(
-                self.messages.append(
-                self.messages.append(
-                    chat.messages.append(
-                    chat.messages.append(
-
     >>> print(grep("hello", "doctest_examples/example_utf16.txt"))
     hello world
 
