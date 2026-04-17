@@ -1,43 +1,34 @@
-name: coverage
+name: Run tests and upload coverage
 
-on:
-  push:
-  pull_request:
+on: 
+  push
 
 jobs:
-  coverage:
+  test:
+    name: Run tests and collect coverage
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out repo
+      - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
       - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
+        uses: actions/setup-python@v4
 
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install pytest pytest-cov
-          pip install .
+        run: pip install pytest pytest-cov
 
-      - name: Run tests with coverage
+      - name: Run tests
         run: |
           pytest --doctest-modules \
                 --cov=chat \
                 --cov=tools \
+                --cov-branch \
                 --cov-report=xml \
                 --cov-report=term-missing
 
-      - name: Inspect coverage file
-        run: |
-          ls -la
-          ls -la tools
-          head -40 coverage.xml
-
-      - name: Upload coverage to Codecov
+      - name: Upload results to Codecov
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
