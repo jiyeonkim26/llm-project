@@ -159,6 +159,7 @@ class Chat:
 
         return result
 
+
 def repl(temperature=0.0):
     '''
     >>> def monkey_input(prompt, user_inputs=['/ls', '/calculate 2 + 2', '/cat doctest_examples/example.txt', '/unknown', '/grep hello doctest_examples/example.txt']):
