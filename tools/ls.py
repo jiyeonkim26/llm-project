@@ -8,10 +8,10 @@ import glob
 
 def ls(folder=None):
     """
-    This function behaves just like the ls program in the shell.
+    This tool behaves just like the ls program in the shell.
 
     >>> ls()
-    'README.md __pycache__ chat.py cmc_csci040_JiyeonKim.egg-info dist example.txt example_utf16.txt htmlcov ls.json pyproject.toml reader-whl requirements.txt test_projects tools tutorial.py venv'
+    'README.md __pycache__ chat.py cmc_csci040_JiyeonKim.egg-info dist doctest_examples htmlcov ls.json pyproject.toml reader-whl requirements.txt test_projects tools tutorial.py venv'
 
     >>> ls('tools')
     'tools/__init__.py tools/__pycache__ tools/calculate.py tools/cat.py tools/grep.py tools/ls.py '

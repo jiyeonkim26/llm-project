@@ -24,7 +24,7 @@ def cat(filename):
     >>> cat("does_not_exist.txt")
     "Error: [Errno 2] No such file or directory: 'does_not_exist.txt'"
 
-    >>> print(cat("example_utf16.txt"))
+    >>> print(cat("doctest_examples/example_utf16.txt"))
     hello world
     >>>
     """

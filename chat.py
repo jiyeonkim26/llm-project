@@ -1,3 +1,6 @@
+'''
+chat.py provides a CLI-based chat interface with a REPL loop that interacts with the Groq API and supports both automatic and manual tool execution.
+'''
 import json
 import os
 import readline
@@ -12,6 +15,12 @@ load_dotenv()
 
 
 class Chat:
+    '''
+    A conversational chat agent that maintains message history and interacts with a language model via the Groq API.
+    The class supports automatic tool use (e.g., calculate, ls, cat, grep) by detecting and executing model-requested function calls,
+    then incorporating their results into the final response. It enables multi-turn conversations with contextual memory
+    and controllable response randomness via the temperature parameter.
+    '''
     '''
     >>> def monkey_input(prompt, user_inputs=['Hello, I am monkey.', 'Goodbye.']):
     ...    try:
@@ -169,7 +178,7 @@ if __name__ == '__main__':
 
 def repl(temperature=0.0):
     '''
-    >>> def monkey_input(prompt, user_inputs=['/ls', '/calculate 2 + 2', '/cat example.txt', '/unknown', '/grep hello example.txt']):
+    >>> def monkey_input(prompt, user_inputs=['/ls', '/calculate 2 + 2', '/cat doctest_examples/example.txt', '/unknown', '/grep hello doctest_examples/example.txt']):
     ...     try:
     ...         user_input = user_inputs.pop(0)
     ...         print(f'{prompt}{user_input}')
@@ -180,14 +189,14 @@ def repl(temperature=0.0):
     >>> builtins.input = monkey_input
     >>> repl(temperature=0.0)
     chat> /ls
-    README.md __pycache__ chat.py cmc_csci040_JiyeonKim.egg-info demo.gif example.txt example_utf16.txt pyproject.toml requirements.txt test_projects tools
+    README.md __pycache__ chat.py cmc_csci040_JiyeonKim.egg-info demo.gif doctest_examples pyproject.toml requirements.txt test_projects tools
     chat> /calculate 2 + 2
     {"result": 4}
-    chat> /cat example.txt
+    chat> /cat doctest_examples/example.txt
     hello world
     chat> /unknown
     Unknown command: unknown
-    chat> /grep hello example.txt
+    chat> /grep hello doctest_examples/example.txt
     hello world
     <BLANKLINE>
     '''
