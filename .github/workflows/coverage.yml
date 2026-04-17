@@ -31,6 +31,12 @@ jobs:
                 --cov-report=xml \
                 --cov-report=term-missing
 
+      - name: Inspect coverage file
+        run: |
+          ls -la
+          ls -la tools
+          head -40 coverage.xml
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
