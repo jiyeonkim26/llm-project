@@ -162,7 +162,7 @@ class Chat:
 
 def repl(temperature=0.0):
     '''
-    >>> def monkey_input(prompt, user_inputs=['/ls', '/calculate 2 + 2', '/cat doctest_examples/example.txt', '/unknown', '/grep hello doctest_examples/example.txt']):
+    >>> def monkey_input(prompt, user_inputs=['/ls doctest_examples', '/calculate 2 + 2', '/cat doctest_examples/example.txt', '/unknown', '/grep hello doctest_examples/example.txt']):
     ...     try:
     ...         user_input = user_inputs.pop(0)
     ...         print(f'{prompt}{user_input}')
@@ -172,8 +172,8 @@ def repl(temperature=0.0):
     >>> import builtins
     >>> builtins.input = monkey_input
     >>> repl(temperature=0.0)
-    chat> /ls
-    README.md __pycache__ build chat.py cmc_csci040_JiyeonKim.egg-info demo.gif doctest_examples pyproject.toml requirements.txt test_projects tools
+    chat> /ls doctest_examples
+    doctest_examples/example.txt doctest_examples/example_utf16.txt 
     chat> /calculate 2 + 2
     {"result": 4}
     chat> /cat doctest_examples/example.txt
