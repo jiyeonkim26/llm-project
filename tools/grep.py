@@ -13,11 +13,11 @@ def grep(regex, path):
     >>> print(grep("append", "chat.py"))
             self.messages.append(
                 self.messages.append(response_message)
-                    self.messages.append({
-                self.messages.append({
-                self.messages.append({
-                        chat.messages.append({
-                        chat.messages.append({
+                    self.messages.append(
+                self.messages.append(
+                self.messages.append(
+                    chat.messages.append(
+                    chat.messages.append(
 
     >>> print(grep("hello", "doctest_examples/example_utf16.txt"))
     hello world
