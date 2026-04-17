@@ -44,15 +44,14 @@ def grep(regex, path):
         if normalized.startswith("..") or "/.." in normalized or "\\.." in normalized:
             return ""
 
-        if any(char in path for char in "*?[]"):
-            return ""
+        # it's not obvious to me why you would not allow these characters in the path;
+        # in particular, doing this filtering here will prevent the
+        # glob from being used in the file at all :(
 
+        # don't include extra whitespace between lines
+        # excess vertical whitespace is a "tell" of an inexperience programmer
         matched_files = sorted(glob.glob(path))
-
         results = []
-
-        pattern = re.compile(regex, re.IGNORECASE)
-
         for filename in matched_files:
             # Only read regular files
             if not os.path.isfile(filename):
@@ -66,6 +65,8 @@ def grep(regex, path):
                     lines = f.readlines()
 
             for line in lines:
+                # variable definition should be close to variable use site
+                pattern = re.compile(regex, re.IGNORECASE)
                 if pattern.search(line):
                     results.append(line.rstrip("\n"))
 

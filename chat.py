@@ -29,23 +29,13 @@ class Chat:
     with contextual memory and controllable response randomness via the
     temperature parameter.
     '''
-    '''
-    >>> def monkey_input(prompt, user_inputs=['Hello, I am monkey.', 'Goodbye.']):
-    ...    try:
-    ...        user_input = user_inputs.pop(0)
-    ...        print(f'{prompt}{user_input}')
-    ...        return user_input
-    ...    except IndexError:
-    ...        raise KeyboardInterrupt
-    >>> import builtins
-    >>> builtins.input = monkey_input
-    >>> repl(temperature=0.0)
-    chat> Hello, I am monkey.
-    Nice to meet you, monkey! How can I help you today?
-    chat> Goodbye.
-    Goodbye! Feel free to return anytime you need assistance.
-    <BLANKLINE>
-    '''
+
+    # NONE OF THE COMMANDS BELOW ARE DOCTESTS!!!
+    # only the >>> commands that are in the very first string
+    # (called the docstring) are actually run when you run the doctests
+    # these ones below are basically just comments and do nothing;
+    # also, I deleted the repl test because any tests for that function
+    # should be inside the repl function and not the Chat class
     '''
     >>> chat = Chat()
     >>> chat.send_message('my name is Bob', temperature=0.0)
@@ -139,6 +129,14 @@ class Chat:
                         function_args["regex"],
                         function_args["path"],
                     )
+                # NOTE:
+                # I very much like the style of comments that you use in your code,
+                # and this style strikes me as "professional" and much better
+                # than most students do;
+                # the basic idea is to divide the code into "paragraphs"
+                # and have your comments be the "topic sentence" of the
+                # paragraph, and so it makes your code easy to skim;
+                # very nice job with this.
 
                 # Add tool response to conversation
                 self.messages.append(
@@ -178,21 +176,9 @@ class Chat:
 
         return result
 
-
-# this makes the user interface nicer by saying 'chat>'
-# repl: reads input and evaluates input
-'''
-if __name__ == '__main__':
-   chat = Chat()
-   try:
-       while True:
-               user_input = input('chat>')
-               response = chat.send_message(user_input)
-               print(response)
-   except KeyboardInterrupt:
-       print()
-'''
-
+# I deleted the "dead code" here that can't be run;
+# in general, any dead code should not be included in a project;
+# it is useful for debugging, but shouldn't be shared
 
 def repl(temperature=0.0):
     '''
@@ -234,6 +220,15 @@ def repl(temperature=0.0):
 
             # Handle slash commands locally: /command param1 param2
             if user_input.startswith("/"):
+
+                # your solution here is acceptable but not elegant
+                # and would make maintaining this code hard in the future;
+                # better would be to "factor out" all of the code about
+                # slash commands into its own function;
+                # this code is all deterministic, and so that function
+                # would be easy to write doctests for and get working
+                # by itself, then the "repl" code is just handling
+                # the user input
                 parts = user_input[1:].strip().split()
 
                 if not parts:
@@ -295,6 +290,13 @@ def repl(temperature=0.0):
                     print(f"Unexpected error: {e}")
                 continue
 
+            # this is particularly non-elegant to have a giant if statement
+            # with a continue buried inside of it;
+            # this would be a nightmare for other people to maintain
+            # (or you in the future)
+            # most companies coding styles explicitly forbid the use of
+            # the continue/break keywords for this reason,
+            # and you should make a habit of not using them
             response = chat.send_message(user_input, temperature=temperature)
             print(response)
 

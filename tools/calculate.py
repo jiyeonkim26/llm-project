@@ -41,5 +41,3 @@ tool_schema = {
         },
     },
 }
-
-# tool file is always going to have one python function and tool schema
