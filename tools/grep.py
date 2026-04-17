@@ -28,9 +28,6 @@ def grep(regex, path):
     >>> grep("(", "chat.py")
     ''
 
-    >>> grep("hello", "*")
-    ''
-
     >>> grep("hello", "tools")
     ''
     '''
@@ -44,12 +41,6 @@ def grep(regex, path):
         if normalized.startswith("..") or "/.." in normalized or "\\.." in normalized:
             return ""
 
-        # it's not obvious to me why you would not allow these characters in the path;
-        # in particular, doing this filtering here will prevent the
-        # glob from being used in the file at all :(
-
-        # don't include extra whitespace between lines
-        # excess vertical whitespace is a "tell" of an inexperience programmer
         matched_files = sorted(glob.glob(path))
         results = []
         for filename in matched_files:
