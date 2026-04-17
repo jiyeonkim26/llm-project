@@ -40,6 +40,39 @@ class Chat:
         ]
 
     def send_message(self, message, temperature=0.8):
+        """
+        >>> class FakeMessage:
+        ...     def __init__(self, content=None, tool_calls=None):
+        ...         self.content = content
+        ...         self.tool_calls = tool_calls
+        >>> class FakeChoice:
+        ...     def __init__(self, message):
+        ...         self.message = message
+        >>> class FakeResponse:
+        ...     def __init__(self, message):
+        ...         self.choices = [FakeChoice(message)]
+        >>> class FakeCompletions:
+        ...     def __init__(self, responses):
+        ...         self.responses = responses
+        ...         self.index = 0
+        ...     def create(self, **kwargs):
+        ...         response = self.responses[self.index]
+        ...         self.index += 1
+        ...         return response
+        >>> class FakeChatAPI:
+        ...     def __init__(self, responses):
+        ...         self.completions = FakeCompletions(responses)
+        >>> class FakeClient:
+        ...     def __init__(self, responses):
+        ...         self.chat = FakeChatAPI(responses)
+
+        >>> chat = Chat()
+        >>> chat.client = FakeClient([
+        ...     FakeResponse(FakeMessage(content="Hello there.", tool_calls=None))
+        ... ])
+        >>> chat.send_message("Hi", temperature=0.0)
+        'Hello there.'
+        """
         self.messages.append(
             {
                 # system: never change; user: changes a lot
