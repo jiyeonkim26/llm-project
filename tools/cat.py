@@ -17,9 +17,9 @@ def cat(filename):
     [![PyPI version](https://img.shields.io/pypi/v/cmc-csci040-JiyeonKim)](https://pypi.org/project/cmc-csci040-JiyeonKim/)
     [![codecov](https://codecov.io/gh/YOUR_USERNAME/YOUR_REPO/branch/main/graph/badge.svg)](https://codecov.io/gh/YOUR_USERNAME/YOUR_REPO)
     <BLANKLINE>
-    This is a command-line chatbot that maintains simple conversational context. This project uses GROQ to create a text-based AI assistant. 
+    This is a command-line chatbot that maintains simple conversational context. This project uses GROQ to create a text-based AI assistant.
     <BLANKLINE>
-    Here is a link to the PyPI package: https://pypi.org/project/cmc-csci040-JiyeonKim/. 
+    Here is a link to the PyPI package: https://pypi.org/project/cmc-csci040-JiyeonKim/.
     ### To install the package:
     ```
     $ pip install cmc-csci040-JiyeonKim
