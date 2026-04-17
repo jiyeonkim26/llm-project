@@ -31,6 +31,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install build twine pytest
           pip install -e .
+          pip install pytest pytest-cov
 
       - name: Run doctests
         run: |
@@ -42,8 +43,9 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          coverage run -m pytest --doctest-modules
-          coverage xml
+          pytest --doctest-modules chat.py tools --cov=chat --cov=tools --cov-branch --cov-report=term-missing --cov-report=xml
 
-      - name: Upload to Codecov
-        uses: codecov/codecov-action@v4
+      - name: Upload coverage reports to Codecov
+          uses: codecov/codecov-action@v5
+          with:
+            token: ${{ secrets.CODECOV_TOKEN }}
