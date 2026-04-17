@@ -1,6 +1,8 @@
 '''
 cat.py defines the function that allows the cat tool to be called and used by chat.py.
 '''
+
+
 def cat(filename):
     """
     This tool returns the contents of a file.
