@@ -6,6 +6,12 @@
 This is a command-line chatbot that maintains simple conversational context. This project uses GROQ to create a text-based AI assistant. 
 
 Here is a link to the PyPI package: https://pypi.org/project/cmc-csci040-JiyeonKim/. 
+### TO INSTALL THE PACKAGE:
+```
+$ pip install cmc-csci040-JiyeonKim
+$ chat
+chat>
+```
 
 ### Animated GIF example of the chat program.
 ![chat demo](demo.gif)
