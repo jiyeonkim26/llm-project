@@ -1,4 +1,8 @@
-"""CLI chat interface using the Groq API and local tools."""
+"""
+chat.py provides a CLI-based chat interface with a REPL loop that
+interacts with the Groq API and supports both automatic and manual
+tool execution.
+"""
 
 import json
 import os
@@ -9,20 +13,51 @@ from tools.calculate import calculate, tool_schema as calculate_schema
 from tools.ls import ls, tool_schema as ls_schema
 from tools.cat import cat, tool_schema as cat_schema
 from tools.grep import grep, tool_schema as grep_schema
+
 from dotenv import load_dotenv
 
 load_dotenv()
 
 
 class Chat:
-    """
-    A conversational chat agent that maintains message history and interacts
-    with the Groq API.
+    '''
+    A conversational chat agent that maintains message history and
+    interacts with a language model via the Groq API. The class supports
+    automatic tool use (e.g., calculate, ls, cat, grep) by detecting and
+    executing model-requested function calls, then incorporating their
+    results into the final response. It enables multi-turn conversations
+    with contextual memory and controllable response randomness via the
+    temperature parameter.
+    '''
+    '''
+    >>> def monkey_input(prompt, user_inputs=['Hello, I am monkey.', 'Goodbye.']):
+    ...    try:
+    ...        user_input = user_inputs.pop(0)
+    ...        print(f'{prompt}{user_input}')
+    ...        return user_input
+    ...    except IndexError:
+    ...        raise KeyboardInterrupt
+    >>> import builtins
+    >>> builtins.input = monkey_input
+    >>> repl(temperature=0.0)
+    chat> Hello, I am monkey.
+    Nice to meet you, monkey! How can I help you today?
+    chat> Goodbye.
+    Goodbye! Feel free to return anytime you need assistance.
+    <BLANKLINE>
+    '''
+    '''
+    >>> chat = Chat()
+    >>> chat.send_message('my name is Bob', temperature=0.0)
+    "Hello Bob, it's nice to meet you."
+    >>> chat.send_message('what is my name?', temperature=0.0)
+    'Your name is Bob.'
 
-    The class supports automatic tool use, such as calculate, ls, cat, and
-    grep, by detecting and executing model-requested function calls and then
-    incorporating their results into the final response.
-    """
+
+    >>> chat2 = Chat()
+    >>> chat2.send_message('what is my name?', temperature=0.0)
+    "I don't have any information about your name. I'm a text-based AI assistant and our conversation just started, so I don't have any prior knowledge about you."
+    '''
 
     MODEL = "openai/gpt-oss-120b"
 
@@ -33,52 +68,19 @@ class Chat:
             {
                 "role": "system",
                 "content": (
-                    "Write the output in 1-2 sentences. Always use tools to "
-                    "complete tasks when appropriate. Don't bold the answer."
+                    "Write the output in 1-2 sentences. Always use tools "
+                    "to complete tasks when appropriate. Don't bold the answer."
                 ),
             },
         ]
 
     def send_message(self, message, temperature=0.8):
-        """
-        >>> class FakeMessage:
-        ...     def __init__(self, content=None, tool_calls=None):
-        ...         self.content = content
-        ...         self.tool_calls = tool_calls
-        >>> class FakeChoice:
-        ...     def __init__(self, message):
-        ...         self.message = message
-        >>> class FakeResponse:
-        ...     def __init__(self, message):
-        ...         self.choices = [FakeChoice(message)]
-        >>> class FakeCompletions:
-        ...     def __init__(self, responses):
-        ...         self.responses = responses
-        ...         self.index = 0
-        ...     def create(self, **kwargs):
-        ...         response = self.responses[self.index]
-        ...         self.index += 1
-        ...         return response
-        >>> class FakeChatAPI:
-        ...     def __init__(self, responses):
-        ...         self.completions = FakeCompletions(responses)
-        >>> class FakeClient:
-        ...     def __init__(self, responses):
-        ...         self.chat = FakeChatAPI(responses)
-
-        >>> chat = Chat()
-        >>> chat.client = FakeClient([
-        ...     FakeResponse(FakeMessage(content="Hello there.", tool_calls=None))
-        ... ])
-        >>> chat.send_message("Hi", temperature=0.0)
-        'Hello there.'
-        """
         self.messages.append(
             {
                 # system: never change; user: changes a lot
                 # the message that you are sending to the AI
-                "role": "user",
-                "content": message,
+                'role': 'user',
+                'content': message,
             }
         )
 
@@ -135,7 +137,7 @@ class Chat:
                 elif function_name == "grep":
                     function_response = function_to_call(
                         function_args["regex"],
-                        function_args["path"]
+                        function_args["path"],
                     )
 
                 # Add tool response to conversation
@@ -159,8 +161,8 @@ class Chat:
             result = second_response.choices[0].message.content
             self.messages.append(
                 {
-                    "role": "assistant",
-                    "content": result,
+                    'role': 'assistant',
+                    'content': result,
                 }
             )
 
@@ -177,66 +179,9 @@ class Chat:
         return result
 
 
-def run_local_command(user_input, available_functions):
-    """
-    Run a slash command locally.
-
-    >>> funcs = {
-    ...     "calculate": calculate,
-    ...     "ls": ls,
-    ...     "cat": cat,
-    ...     "grep": grep,
-    ... }
-    >>> run_local_command("/unknown", funcs)
-    'Unknown command: unknown'
-    >>> run_local_command("/", funcs)
-    'Unknown command'
-    >>> run_local_command("/calculate 2 + 2", funcs)
-    '{"result": 4}'
-    >>> run_local_command("/cat definitely_missing.txt", funcs)
-    "Error: [Errno 2] No such file or directory: 'definitely_missing.txt'"
-    >>> run_local_command("/grep hello definitely_missing.txt", funcs)
-    ''
-    """
-    parts = user_input[1:].strip().split()
-
-    if not parts:
-        return "Unknown command"
-
-    command = parts[0]
-    args = parts[1:]
-
-    if command not in available_functions:
-        return f"Unknown command: {command}"
-
-    if command == "calculate":
-        if len(args) < 1:
-            return "Error: calculate requires an expression"
-        expression = " ".join(args)
-        return calculate(expression)
-
-    if command == "ls":
-        folder = args[0] if args else None
-        return ls(folder)
-
-    if command == "cat":
-        if len(args) != 1:
-            return "Error: cat requires exactly one filename"
-        return cat(args[0])
-
-    if command == "grep":
-        if len(args) < 2:
-            return "Error: grep requires a regex and a path"
-        regex = args[0]
-        path = " ".join(args[1:])
-        return grep(regex, path)
-
-    return f"Unknown command: {command}"
-
-
 # this makes the user interface nicer by saying 'chat>'
 # repl: reads input and evaluates input
-"""
+'''
 if __name__ == '__main__':
    chat = Chat()
    try:
@@ -246,21 +191,12 @@ if __name__ == '__main__':
                print(response)
    except KeyboardInterrupt:
        print()
-"""
+'''
 
 
 def repl(temperature=0.0):
-    """
-    >>> def monkey_input(
-    ...     prompt,
-    ...     user_inputs=[
-    ...         '/ls',
-    ...         '/calculate 2 + 2',
-    ...         '/cat doctest_examples/example.txt',
-    ...         '/unknown',
-    ...         '/grep hello doctest_examples/example.txt'
-    ...     ]
-    ... ):
+    '''
+    >>> def monkey_input(prompt, user_inputs=['/ls', '/calculate 2 + 2', '/cat doctest_examples/example.txt', '/unknown', '/grep hello doctest_examples/example.txt']):
     ...     try:
     ...         user_input = user_inputs.pop(0)
     ...         print(f'{prompt}{user_input}')
@@ -281,7 +217,7 @@ def repl(temperature=0.0):
     chat> /grep hello doctest_examples/example.txt
     hello world
     <BLANKLINE>
-    """
+    '''
     readline.parse_and_bind("tab: complete")
     chat = Chat()
 
@@ -294,26 +230,69 @@ def repl(temperature=0.0):
 
     try:
         while True:
-            user_input = input("chat> ")
+            user_input = input('chat> ')
 
             # Handle slash commands locally: /command param1 param2
             if user_input.startswith("/"):
-                result = run_local_command(user_input, available_functions)
-                print(result)
+                parts = user_input[1:].strip().split()
 
-                # Store the slash command and result in conversation history
-                chat.messages.append(
-                    {
-                        "role": "user",
-                        "content": user_input,
-                    }
-                )
-                chat.messages.append(
-                    {
-                        "role": "assistant",
-                        "content": result,
-                    }
-                )
+                if not parts:
+                    print("Unknown command")
+                    continue
+
+                command = parts[0]
+                args = parts[1:]
+
+                if command not in available_functions:
+                    print(f"Unknown command: {command}")
+                    continue
+
+                try:
+                    if command == "calculate":
+                        if len(args) < 1:
+                            result = "Error: calculate requires an expression"
+                        else:
+                            expression = " ".join(args)
+                            result = calculate(expression)
+
+                    elif command == "ls":
+                        folder = args[0] if args else None
+                        result = ls(folder)
+
+                    elif command == "cat":
+                        if len(args) != 1:
+                            result = (
+                                "Error: cat requires exactly one filename"
+                            )
+                        else:
+                            result = cat(args[0])
+
+                    elif command == "grep":
+                        if len(args) < 2:
+                            result = "Error: grep requires a regex and a path"
+                        else:
+                            regex = args[0]
+                            path = " ".join(args[1:])
+                            result = grep(regex, path)
+
+                    print(result)
+
+                    # Store the slash command and result in conversation history
+                    chat.messages.append(
+                        {
+                            "role": "user",
+                            "content": user_input,
+                        }
+                    )
+                    chat.messages.append(
+                        {
+                            "role": "assistant",
+                            "content": result,
+                        }
+                    )
+
+                except Exception as e:
+                    print(f"Unexpected error: {e}")
                 continue
 
             response = chat.send_message(user_input, temperature=temperature)
@@ -322,9 +301,9 @@ def repl(temperature=0.0):
     except (KeyboardInterrupt, EOFError):
         print()
 
-    except Exception as exc:
-        print(f"Unexpected error: {exc}")
+    except Exception as e:
+        print(f"Unexpected error: {e}")
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     repl(temperature=0.0)
