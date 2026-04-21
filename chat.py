@@ -63,6 +63,9 @@ class Chat:
         ]
 
     def send_message(self, message, temperature=0.8):
+        '''
+        >>> 
+        '''
         self.messages.append(
             {
                 # system: never change; user: changes a lot
@@ -225,7 +228,13 @@ def _run_slash_command(command, args, available_functions):
 
     >>> _run_slash_command('grep', ['hello'], funcs)
     'Error: grep requires a regex and a path'
+
+    >>> _run_slash_command('not_command', ['hello'], funcs)
+    'Unknown command: not_command'
     '''
+    if command not in available_functions:
+        return f"Unknown command: {command}"
+
     function_to_call = available_functions[command]
 
     if command == "calculate":
