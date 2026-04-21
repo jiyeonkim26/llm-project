@@ -7,6 +7,7 @@ tool execution.
 import json
 import os
 import readline
+import shlex
 
 from groq import Groq
 from tools.calculate import calculate, tool_schema as calculate_schema
@@ -46,6 +47,9 @@ class Chat:
     MODEL = "openai/gpt-oss-120b"
 
     def __init__(self):
+        '''
+
+        '''
         self.client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
         self.messages = [
@@ -160,6 +164,178 @@ class Chat:
         return result
 
 
+def _parse_slash_command(user_input):
+    '''
+    Parse slash-command input into a command name and argument list.
+
+    This parser uses shell-style splitting so quoted strings work.
+
+    >>> _parse_slash_command('/calculate 2 + 2')
+    ('calculate', ['2', '+', '2'])
+
+    >>> _parse_slash_command('/cat "doctest_examples/example.txt"')
+    ('cat', ['doctest_examples/example.txt'])
+
+    >>> _parse_slash_command('/grep "hello world" doctest_examples/example.txt')
+    ('grep', ['hello world', 'doctest_examples/example.txt'])
+
+    >>> _parse_slash_command('/')
+    (None, [])
+
+    >>> _parse_slash_command('hello')
+    (None, [])
+    '''
+    if not user_input.startswith("/"):
+        return None, []
+
+    raw = user_input[1:].strip()
+    if not raw:
+        return None, []
+
+    try:
+        parts = shlex.split(raw)
+    except ValueError:
+        parts = raw.split()
+
+    if not parts:
+        return None, []
+
+    return parts[0], parts[1:]
+
+
+def _run_slash_command(command, args, available_functions):
+    '''
+    Execute a validated slash command and return the resulting string.
+
+    >>> funcs = {
+    ...     "calculate": calculate,
+    ...     "ls": ls,
+    ...     "cat": cat,
+    ...     "grep": grep,
+    ... }
+
+    >>> _run_slash_command('calculate', ['2', '+', '2'], funcs)
+    '{"result": 4}'
+
+    >>> _run_slash_command('calculate', [], funcs)
+    'Error: calculate requires an expression'
+
+    >>> _run_slash_command('cat', [], funcs)
+    'Error: cat requires exactly one filename'
+
+    >>> _run_slash_command('grep', ['hello'], funcs)
+    'Error: grep requires a regex and a path'
+    '''
+    function_to_call = available_functions[command]
+
+    if command == "calculate":
+        if not args:
+            return "Error: calculate requires an expression"
+        expression = " ".join(args)
+        return function_to_call(expression)
+
+    if command == "ls":
+        folder = args[0] if args else None
+        return function_to_call(folder)
+
+    if command == "cat":
+        if len(args) != 1:
+            return "Error: cat requires exactly one filename"
+        return function_to_call(args[0])
+
+    if command == "grep":
+        if len(args) < 2:
+            return "Error: grep requires a regex and a path"
+        regex = args[0]
+        path = " ".join(args[1:])
+        return function_to_call(regex, path)
+
+    return f"Unknown command: {command}"
+
+
+def _record_slash_command(chat, user_input, result):
+    '''
+    Store a handled slash command and its result in chat history.
+
+    >>> class DummyChat:
+    ...     def __init__(self):
+    ...         self.messages = []
+    ...
+    >>> chat = DummyChat()
+    >>> _record_slash_command(chat, '/calculate 2 + 2', '{"result": 4}')
+    >>> chat.messages
+    [{'role': 'user', 'content': '/calculate 2 + 2'}, {'role': 'assistant', 'content': '{"result": 4}'}]
+    '''
+    chat.messages.append(
+        {
+            "role": "user",
+            "content": user_input,
+        }
+    )
+    chat.messages.append(
+        {
+            "role": "assistant",
+            "content": result,
+        }
+    )
+
+
+def slash_command(user_input, available_functions, chat):
+    '''
+    Handle local slash commands. Return True when handled locally and
+    False when the input should be sent to the language model.
+
+    >>> class DummyChat:
+    ...     def __init__(self):
+    ...         self.messages = []
+    ...
+    >>> funcs = {
+    ...     "calculate": calculate,
+    ...     "ls": ls,
+    ...     "cat": cat,
+    ...     "grep": grep,
+    ... }
+    >>> chat = DummyChat()
+
+    >>> slash_command('/calculate 2 + 2', funcs, chat)
+    {"result": 4}
+    True
+
+    >>> slash_command('/unknown', funcs, chat)
+    Unknown command: unknown
+    True
+
+    >>> slash_command('/', funcs, chat)
+    Unknown command
+    True
+
+    >>> slash_command('hello', funcs, chat)
+    False
+    '''
+    if not user_input.startswith("/"):
+        return False
+
+    command, args = _parse_slash_command(user_input)
+
+    if command is None:
+        print("Unknown command")
+        return True
+
+    if command not in available_functions:
+        print(f"Unknown command: {command}")
+        return True
+
+    try:
+        result = _run_slash_command(command, args, available_functions)
+        print(result)
+        _record_slash_command(chat, user_input, result)
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+
+    return True
+
+
+# repl: reads input and evaluates input
 def repl(temperature=0.0):
     '''
     >>> def monkey_input(prompt, user_inputs=['/ls doctest_examples', '/calculate 2 + 2', '/cat doctest_examples/example.txt', '/unknown', '/grep hello doctest_examples/example.txt']):
@@ -196,80 +372,14 @@ def repl(temperature=0.0):
 
     try:
         while True:
+            # this makes the user interface nicer by saying 'chat>'
             user_input = input('chat> ')
-
-            # Handle slash commands locally: /command param1 param2
-            if user_input.startswith("/"):
-
-                parts = user_input[1:].strip().split()
-
-                if not parts:
-                    print("Unknown command")
-                    continue
-
-                command = parts[0]
-                args = parts[1:]
-
-                if command not in available_functions:
-                    print(f"Unknown command: {command}")
-                    continue
-
-                try:
-                    if command == "calculate":
-                        if len(args) < 1:
-                            result = "Error: calculate requires an expression"
-                        else:
-                            expression = " ".join(args)
-                            result = calculate(expression)
-
-                    elif command == "ls":
-                        folder = args[0] if args else None
-                        result = ls(folder)
-
-                    elif command == "cat":
-                        if len(args) != 1:
-                            result = (
-                                "Error: cat requires exactly one filename"
-                            )
-                        else:
-                            result = cat(args[0])
-
-                    elif command == "grep":
-                        if len(args) < 2:
-                            result = "Error: grep requires a regex and a path"
-                        else:
-                            regex = args[0]
-                            path = " ".join(args[1:])
-                            result = grep(regex, path)
-
-                    print(result)
-
-                    # Store the slash command and result in conversation history
-                    chat.messages.append(
-                        {
-                            "role": "user",
-                            "content": user_input,
-                        }
-                    )
-                    chat.messages.append(
-                        {
-                            "role": "assistant",
-                            "content": result,
-                        }
-                    )
-
-                except Exception as e:
-                    print(f"Unexpected error: {e}")
+            if slash_command(user_input, available_functions, chat):
                 continue
-
             response = chat.send_message(user_input, temperature=temperature)
             print(response)
-
-    except (KeyboardInterrupt, EOFError):
+    except (KeyboardInterrupt):
         print()
-
-    except Exception as e:
-        print(f"Unexpected error: {e}")
 
 
 if __name__ == '__main__':
