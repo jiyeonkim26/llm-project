@@ -231,6 +231,9 @@ def _run_slash_command(command, args, available_functions):
 
     >>> _run_slash_command('not_command', ['hello'], funcs)
     'Unknown command: not_command'
+
+    >>> _run_slash_command('grep', ['hello', 'doctest_examples/example.txt'], funcs)
+    'hello world'
     '''
     if command not in available_functions:
         return f"Unknown command: {command}"
@@ -258,8 +261,6 @@ def _run_slash_command(command, args, available_functions):
         regex = args[0]
         path = " ".join(args[1:])
         return function_to_call(regex, path)
-
-    return f"Unknown command: {command}"
 
 
 def _record_slash_command(chat, user_input, result):
