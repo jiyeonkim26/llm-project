@@ -46,7 +46,7 @@ class Chat:
 
     MODEL = "openai/gpt-oss-120b"
 
-    def __init__(self):
+    def __init__(self): 
         self.client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
         self.messages = [
@@ -61,7 +61,14 @@ class Chat:
 
     def send_message(self, message, temperature=0.8):
         '''
-        >>> 
+        >>> from unittest.mock import MagicMock
+        >>> chat = Chat()
+        >>> chat.client = MagicMock()
+        >>> chat.client.chat.completions.create.return_value = MagicMock(
+        ...     choices=[MagicMock(message=MagicMock(content="Hello Bob, it's nice to meet you.", tool_calls=None))]
+        ... )
+        >>> chat.send_message('my name is Bob', temperature=0.0)
+        "Hello Bob, it's nice to meet you."
         '''
         self.messages.append(
             {
