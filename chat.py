@@ -47,9 +47,6 @@ class Chat:
     MODEL = "openai/gpt-oss-120b"
 
     def __init__(self):
-        '''
-
-        '''
         self.client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
         self.messages = [
@@ -64,7 +61,141 @@ class Chat:
 
     def send_message(self, message, temperature=0.8):
         '''
-        >>> 
+        Sends a user message to the model, executes any requested local tools,
+        appends all relevant conversation state, and returns the final assistant
+        response.
+
+        This method supports both direct model responses and tool-augmented
+        responses.
+
+        >>> class DummyMessage:
+        ...     def __init__(self, content=None, tool_calls=None):
+        ...         self.content = content
+        ...         self.tool_calls = tool_calls
+        ...
+        >>> class DummyChoice:
+        ...     def __init__(self, message):
+        ...         self.message = message
+        ...
+        >>> class DummyResponse:
+        ...     def __init__(self, message):
+        ...         self.choices = [DummyChoice(message)]
+        ...
+        >>> class DummyToolFunction:
+        ...     def __init__(self, name, arguments):
+        ...         self.name = name
+        ...         self.arguments = arguments
+        ...
+        >>> class DummyToolCall:
+        ...     def __init__(self, tool_id, name, arguments):
+        ...         self.id = tool_id
+        ...         self.function = DummyToolFunction(name, arguments)
+        ...
+        >>> class DummyCompletions:
+        ...     def __init__(self, responses):
+        ...         self.responses = responses
+        ...         self.calls = []
+        ...     def create(self, **kwargs):
+        ...         self.calls.append(kwargs)
+        ...         return self.responses.pop(0)
+        ...
+        >>> class DummyChatAPI:
+        ...     def __init__(self, responses):
+        ...         self.completions = DummyCompletions(responses)
+        ...
+        >>> class DummyClient:
+        ...     def __init__(self, responses):
+        ...         self.chat = DummyChatAPI(responses)
+        ...
+
+        Direct-response path:
+
+        >>> chat = Chat()
+        >>> chat.client = DummyClient([
+        ...     DummyResponse(DummyMessage(content='Hello there!', tool_calls=None))
+        ... ])
+        >>> chat.send_message('Hi', temperature=0.0)
+        'Hello there!'
+        >>> chat.messages[-2]['role']
+        'user'
+        >>> chat.messages[-2]['content']
+        'Hi'
+        >>> chat.messages[-1]['role']
+        'assistant'
+        >>> chat.messages[-1]['content']
+        'Hello there!'
+        >>> len(chat.client.chat.completions.calls)
+        1
+        >>> chat.client.chat.completions.calls[0]['temperature']
+        0.0
+        >>> chat.client.chat.completions.calls[0]['model'] == chat.MODEL
+        True
+
+        Tool-call path with calculate:
+
+        >>> chat2 = Chat()
+        >>> first_message = DummyMessage(
+        ...     content=None,
+        ...     tool_calls=[
+        ...         DummyToolCall('tool-1', 'calculate', '{"expression": "2 + 2"}')
+        ...     ]
+        ... )
+        >>> second_message = DummyMessage(
+        ...     content='The answer is 4.',
+        ...     tool_calls=None
+        ... )
+        >>> chat2.client = DummyClient([
+        ...     DummyResponse(first_message),
+        ...     DummyResponse(second_message),
+        ... ])
+        >>> chat2.send_message('What is 2 + 2?', temperature=0.0)
+        'The answer is 4.'
+        >>> chat2.messages[1]['role']
+        'user'
+        >>> chat2.messages[1]['content']
+        'What is 2 + 2?'
+        >>> chat2.messages[3]['role']
+        'tool'
+        >>> chat2.messages[3]['name']
+        'calculate'
+        >>> chat2.messages[3]['content']
+        '{"result": 4}'
+        >>> chat2.messages[-1]['role']
+        'assistant'
+        >>> chat2.messages[-1]['content']
+        'The answer is 4.'
+        >>> len(chat2.client.chat.completions.calls)
+        2
+
+        Tool-call path with grep:
+
+        >>> chat3 = Chat()
+        >>> first_message = DummyMessage(
+        ...     content=None,
+        ...     tool_calls=[
+        ...         DummyToolCall(
+        ...             'tool-2',
+        ...             'grep',
+        ...             '{"regex": "hello", "path": "doctest_examples/example.txt"}'
+        ...         )
+        ...     ]
+        ... )
+        >>> second_message = DummyMessage(
+        ...     content='I found one matching line.',
+        ...     tool_calls=None
+        ... )
+        >>> chat3.client = DummyClient([
+        ...     DummyResponse(first_message),
+        ...     DummyResponse(second_message),
+        ... ])
+        >>> chat3.send_message('Find hello in the example file.', temperature=0.0)
+        'I found one matching line.'
+        >>> chat3.messages[3]['role']
+        'tool'
+        >>> chat3.messages[3]['name']
+        'grep'
+        >>> chat3.messages[3]['content']
+        'hello world'
         '''
         self.messages.append(
             {
