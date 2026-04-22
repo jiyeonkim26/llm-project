@@ -2,9 +2,9 @@ name: doctests
 
 on:
   push:
-    branches: [ agent ]
+    branches: ['*']
   pull_request:
-    branches: [ agent ]
+    branches: ['*']
 
 jobs:
   tests:
