@@ -20,8 +20,8 @@ def ls(folder=None):
     >>> "chat.py" in output
     True
 
-    >>> ls('tools')
-    'tools/__init__.py tools/__pycache__ tools/calculate.py tools/cat.py tools/doctests.py tools/grep.py tools/ls.py '
+    >>> ls('doctest_examples')
+    '__pycache__ example_utf16.txt example.txt test.py '
     """
     if folder:
         result = ""

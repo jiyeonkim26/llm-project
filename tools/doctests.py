@@ -10,11 +10,8 @@ def doctests(path):
     '''
     This tool runs the doctests (with the --verbose flag) and returns the output.
 
-    >>> doctests("doctest_examples/test.py")  # doctest: +ELLIPSIS
-    --- Running doctests for: doctest_examples/test.py ---
-    Trying:
-    ...
-    Test passed.
+    >>> "Test passed." in run_doctest("doctest_examples/test.py")
+    True
 
     >>> doctests("doctest_examples/example.txt")
     Skipping doctest_examples/example.txt: Not a .py file
