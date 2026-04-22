@@ -363,9 +363,9 @@ def repl(temperature=0.0):
     >>> builtins.input = monkey_input
     >>> repl(temperature=0.0)
     chat> /ls doctest_examples
-    doctest_examples/example.txt doctest_examples/example_utf16.txt doctest_examples/test.py 
-    chat> /calculate 2 + 2
-    {"result": 4}
+    doctest_examples/__pycache__ doctest_examples/example.txt doctest_examples/example_utf16.txt doctest_examples/test.py 
+     chat> /calculate 2 + 2
+     {"result": 4}
     chat> /cat doctest_examples/example.txt
     hello world
     chat> /unknown
