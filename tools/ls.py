@@ -21,7 +21,7 @@ def ls(folder=None):
     True
 
     >>> ls('tools')
-    'tools/__init__.py tools/__pycache__ tools/calculate.py tools/cat.py tools/grep.py tools/ls.py '
+    'tools/__init__.py tools/__pycache__ tools/calculate.py tools/cat.py tools/doctests.py tools/grep.py tools/ls.py '
     """
     if folder:
         result = ""
