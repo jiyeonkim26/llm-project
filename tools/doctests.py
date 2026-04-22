@@ -1,7 +1,6 @@
 '''
 doctests.py defines the function that allows the doctests tool to be called and used by chat.py.
 '''
-import sys
 import doctest
 import importlib.util
 import os
