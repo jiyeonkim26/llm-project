@@ -352,7 +352,7 @@ def slash_command(user_input, available_functions, chat):
 # repl: reads input and evaluates input
 def repl(temperature=0.0):
     '''
-    >>> def monkey_input(prompt, user_inputs=['/ls doctest_examples', '/calculate 2 + 2', '/cat doctest_examples/example.txt', '/unknown', '/grep hello doctest_examples/example.txt']):
+    >>> def monkey_input(prompt, user_inputs=['/ls .github', '/calculate 2 + 2', '/cat doctest_examples/example.txt', '/unknown', '/grep hello doctest_examples/example.txt']):
     ...     try:
     ...         user_input = user_inputs.pop(0)
     ...         print(f'{prompt}{user_input}')
@@ -362,10 +362,10 @@ def repl(temperature=0.0):
     >>> import builtins
     >>> builtins.input = monkey_input
     >>> repl(temperature=0.0)
-    chat> /ls doctest_examples
-    doctest_examples/__pycache__ doctest_examples/example.txt doctest_examples/example_utf16.txt doctest_examples/test.py 
-     chat> /calculate 2 + 2
-     {"result": 4}
+    chat> /ls .github
+    .github/workflows 
+    chat> /calculate 2 + 2
+    {"result": 4}
     chat> /cat doctest_examples/example.txt
     hello world
     chat> /unknown
