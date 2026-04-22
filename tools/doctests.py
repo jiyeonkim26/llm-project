@@ -11,7 +11,7 @@ def doctests(path):
     This tool runs the doctests (with the --verbose flag) and returns the output.
 
     >>> doctests("doctest_examples/test.py")
-    --- Running doctests for: doctest_examples/test.py ---
+    '--- Running doctests for: doctest_examples/test.py ---
     Trying:
         calculate("3 + 2")
     Expecting:
@@ -22,8 +22,8 @@ def doctests(path):
     1 item passed all tests:
        1 test in test.calculate
     1 test in 2 items.
-    1 passed.
-    Test passed.
+    1 passed and 0 failed.
+    Test passed.'
 
     >>> doctests("doctest_examples/example.txt")
     Skipping doctest_examples/example.txt: Not a .py file
