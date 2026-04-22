@@ -10,29 +10,19 @@ def doctests(path):
     '''
     This tool runs the doctests (with the --verbose flag) and returns the output.
 
-    >>> doctests("tools/cat.py")
-    --- Running doctests for: tools/cat.py ---
+    >>> doctests("doctest_examples/test.py")
+    --- Running doctests for: doctest_examples/test.py ---
     Trying:
-        cat("does_not_exist.txt")
+        calculate("3 + 2")
     Expecting:
-        "Error: [Errno 2] No such file or directory: 'does_not_exist.txt'"
-    ok
-    Trying:
-        print(cat("doctest_examples/example_utf16.txt"))
-    Expecting:
-        hello world
-    ok
-    Trying:
-        print(cat("doctest_examples/example.txt"))
-    Expecting:
-        hello world
+        '{"result": 5}'
     ok
     1 item had no tests:
-        cat
+        test
     1 item passed all tests:
-       3 tests in cat.cat
-    3 tests in 2 items.
-    3 passed.
+       1 test in test.calculate
+    1 test in 2 items.
+    1 passed.
     Test passed.
 
     >>> doctests("doctest_examples/example.txt")
