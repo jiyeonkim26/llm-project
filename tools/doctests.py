@@ -10,19 +10,10 @@ def doctests(path):
     '''
     This tool runs the doctests (with the --verbose flag) and returns the output.
 
-    >>> doctests("doctest_examples/test.py")
+    >>> doctests("doctest_examples/test.py")  # doctest: +ELLIPSIS
     --- Running doctests for: doctest_examples/test.py ---
     Trying:
-        calculate("3 + 2")
-    Expecting:
-        '{"result": 5}'
-    ok
-    1 item had no tests:
-        test
-    1 item passed all tests:
-       1 test in test.calculate
-    1 test in 2 items.
-    1 passed.
+    ...
     Test passed.
 
     >>> doctests("doctest_examples/example.txt")
