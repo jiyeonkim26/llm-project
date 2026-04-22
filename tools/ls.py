@@ -21,7 +21,7 @@ def ls(folder=None):
     True
 
     >>> ls('doctest_examples')
-    '__pycache__ example_utf16.txt example.txt test.py '
+    'doctest_examples/example.txt doctest_examples/example_utf16.txt doctest_examples/test.py '
     """
     if folder:
         result = ""

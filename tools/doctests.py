@@ -10,7 +10,7 @@ def doctests(path):
     '''
     This tool runs the doctests (with the --verbose flag) and returns the output.
 
-    >>> "Test passed." in run_doctest("doctest_examples/test.py")
+    >>> "Test passed." in doctests("doctest_examples/test.py")
     True
 
     >>> doctests("doctest_examples/example.txt")
