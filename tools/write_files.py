@@ -52,7 +52,6 @@ def write_files(files, commit_message):
 
         written_paths.append(path)
 
-    try:
         repo = Repo(search_parent_directories=True)
         repo.index.add(written_paths)
 
@@ -60,8 +59,3 @@ def write_files(files, commit_message):
         repo.index.commit(full_message)
 
         return f"Wrote {len(files)} file(s) and committed with message '{full_message}'"
-
-    except GitCommandError as e:
-        return f"Git error: {e}"
-    except Exception as e:
-        return f"Error: {e}"

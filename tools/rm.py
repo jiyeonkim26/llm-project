@@ -22,6 +22,9 @@ def rm(path):
 
     >>> rm("../secret.txt")
     'Invalid path.'
+    
+    >>> rm("doctest_examples")
+    'Refusing to remove directories.'
     """
     if not valid_path(path):
         return "Invalid path."
