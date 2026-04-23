@@ -1,5 +1,5 @@
 '''
-cat.py defines the function that allows the grep tool to be called and used by chat.py.
+grep.py defines the function that allows the grep tool to be called and used by chat.py.
 '''
 import glob
 import os
@@ -8,7 +8,7 @@ import re
 
 def grep(regex, path):
     '''
-    This tool searches every file matching a glob path and return lines that match regex.
+    Searches every file matching a glob path and returns lines that match regex.
 
     >>> print(grep("hello", "doctest_examples/example_utf16.txt"))
     hello world

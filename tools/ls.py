@@ -1,17 +1,12 @@
 '''
 ls.py defines the function that allows the ls tool to be called and used by chat.py.
 '''
-# step 1: create function wiht the right number of args; write the docstring
-# step 2: create the doctests for that function
-# step 3: get the function to pass doctest
-# step 3b: may have to modify doctests to get them to pass
-# step 4: you know you have enough doctests if you have 100% code coverage
 import glob
 
 
 def ls(folder=None):
     """
-    This tool behaves just like the ls program in the shell.
+    Behaves just like the ls program in the shell.
 
     >>> ls('doesnotexist')
     ''

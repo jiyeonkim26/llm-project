@@ -5,7 +5,7 @@ cat.py defines the function that allows the cat tool to be called and used by ch
 
 def cat(filename):
     """
-    This tool returns the contents of a file.
+    Returns the contents of a file.
 
     >>> cat("does_not_exist.txt")
     "Error: [Errno 2] No such file or directory: 'does_not_exist.txt'"

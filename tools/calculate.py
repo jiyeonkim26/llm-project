@@ -6,7 +6,7 @@ import json
 
 def calculate(expression):
     '''
-    This tool evaluates a mathematical expression.
+    Evaluates a mathematical expression.
 
     >>> calculate("3 + 2")
     '{"result": 5}'

@@ -10,7 +10,7 @@ from contextlib import redirect_stdout
 
 def doctests(path):
     '''
-    This tool runs the doctests (with the --verbose flag) and returns the output.
+    Runs doctests (with the --verbose flag) on a file path and returns the output.
 
     >>> "Test passed." in doctests("doctest_examples/test.py")
     True
