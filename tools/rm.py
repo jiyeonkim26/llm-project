@@ -30,35 +30,26 @@ def rm(path):
         return "No files matched."
 
     for match in matches:
-        if not valid_path(match):
-            return "Invalid path."
         if os.path.isdir(match):
             return "Refusing to remove directories."
+        
+        else:
+            repo = Repo(search_parent_directories=True)
+            repo_root = repo.working_tree_dir
 
-    try:
-        repo = Repo(search_parent_directories=True)
-        repo_root = repo.working_tree_dir
+            abs_matches = [os.path.abspath(match) for match in matches]
+            rel_matches = [os.path.relpath(match, repo_root) for match in abs_matches]
 
-        abs_matches = [os.path.abspath(match) for match in matches]
-        rel_matches = [os.path.relpath(match, repo_root) for match in abs_matches]
+            for match in abs_matches:
+                os.remove(match)
 
-        for match in abs_matches:
-            os.remove(match)
+            # Stage deletions for tracked files
+            repo.git.add("--update", *rel_matches)
 
-        # Stage deletions for tracked files
-        repo.git.add("--update", *rel_matches)
+            commit_message = f"[docchat] rm {path}"
+            repo.index.commit(commit_message)
 
-        commit_message = f"[docchat] rm {path}"
-        repo.index.commit(commit_message)
-
-        return f"Removed {len(matches)} file(s) and committed with message '{commit_message}'"
-
-    except FileNotFoundError:
-        return "No such file or directory."
-    except GitCommandError as e:
-        return f"Git error: {e}"
-    except Exception as e:
-        return f"Error: {e}"
+            return f"Removed {len(matches)} file(s) and committed with message '{commit_message}'"
 
 
 tool_schema = {
