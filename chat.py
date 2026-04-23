@@ -49,7 +49,7 @@ class Chat:
     "I don't have any information about your name. I'm a text-based AI assistant and our conversation just started, so I don't have any prior knowledge about you."
     '''
 
-    MODEL = "openai/gpt-oss-120b"
+    MODEL = "openai/gpt-oss-20b"
 
     def __init__(self): 
         self.client = Groq(api_key=os.getenv("GROQ_API_KEY"))
