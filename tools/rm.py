@@ -13,16 +13,12 @@ def rm(path):
 
     >>> rm("doctest_examples/rm_test.txt")
     "Removed 1 file(s) and committed with message '[docchat] rm doctest_examples/rm_test.txt'"
-
     >>> rm("doctest_examples/*.does_not_exist")
     'No files matched.'
-
     >>> rm("/etc/passwd")
     'Invalid path.'
-
     >>> rm("../secret.txt")
     'Invalid path.'
-    
     >>> rm("doctest_examples")
     'Refusing to remove directories.'
     """

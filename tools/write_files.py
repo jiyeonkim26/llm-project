@@ -1,7 +1,7 @@
 """
 Defines a function that writes multiple files and commits them in a single git commit.
 """
-from git import Repo, GitCommandError
+from git import Repo
 import os
 from tools.valid_path import valid_path
 
