@@ -75,15 +75,7 @@ class Chat:
         )
 
         # define tools
-        tools = [calculate_schema, 
-                    ls_schema, 
-                    cat_schema, 
-                    grep_schema, 
-                    doctests_schema, 
-                    rm_schema, 
-                    write_file_schema, 
-                    write_files_schema, 
-                    valid_path_schema]
+        tools = [calculate_schema, ls_schema, cat_schema, grep_schema, doctests_schema, rm_schema, write_file_schema, write_files_schema, valid_path_schema]
 
         # higher temperature = more randomness/creativity
         chat_completion = self.client.chat.completions.create(
