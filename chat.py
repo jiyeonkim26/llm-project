@@ -83,7 +83,7 @@ class Chat:
         >>> reply = chat.send_message("List files in the tools directory", temperature=0.0)  #ls
         >>> 'rm.py' in reply
         True
-        >>> test_reply = chat.send_message("Run doctests on tools/cat.py and return doctest output", temperature=0.0)  #doctests
+        >>> test_reply = chat.send_message("Run doctests on doctest_examples/test.py and return exact doctest output", temperature=0.0)  #doctests
         >>> 'Test passed.' in test_reply
         True
         '''
