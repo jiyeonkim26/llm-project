@@ -38,13 +38,24 @@ Web scraping is generally legal in the United States as long as you respect the 
 
 This example demonstrates that the chatbot can create and remove files when asked with changes automatically committed to the git repo.
 ```
+$ ls doctest_examples 
+__pycache__             example_utf16.txt       example.txt             file.txt                rm_test.txt             test.pychat
 $ chat
 chat> what files are in the doctest_examples folder?
 The folder contains `__pycache__/`, `example.txt`, `example_utf16.txt`, `file.txt`, `rm_test.txt`, and `test.py`.
 chat> add a file titled hello_world.txt with 'hello world' as the file's contents into the folder.
 Added `hello_world.txt` containing “hello world” to the `doctest_examples` folder.
+chat> ^c
+$ git log --oneline
+5fcc5f0 (HEAD -> agent) [docchat] Add hello_world.txt with greeting
+$ chat
 chat> what files are now in the doctest_examples folder?
 The folder now contains `__pycache__/`, `example.txt`, `example_utf16.txt`, `file.txt`, `hello_world.txt`, `rm_test.txt`, and `test.py`.
 chat> thanks, now remove the hello_world.txt file from the folder.
-The `hello_world.txt` file has been removed from the `doctest_examples` folder. The file has been deleted.
+The hello_world.txt file has been removed. The folder now contains __pycache__, example.txt, example_utf16.txt, file.txt, rm_test.txt, and test.py.
+chat> ^c
+$ ls doctest_examples
+__pycache__             example_utf16.txt       example.txt             file.txt                rm_test.txt             test.py
+$ git log --oneline
+372eec8 (HEAD -> agent) [docchat] rm doctest_examples/hello_world.txt
 ```
