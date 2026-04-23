@@ -3,7 +3,7 @@ Removes one or more files using glob pattern and commits the deletion to git.
 """
 import os
 import glob
-from git import Repo, GitCommandError
+from git import Repo
 from tools.valid_path import valid_path
 
 
@@ -32,7 +32,7 @@ def rm(path):
     for match in matches:
         if os.path.isdir(match):
             return "Refusing to remove directories."
-        
+
         else:
             repo = Repo(search_parent_directories=True)
             repo_root = repo.working_tree_dir
