@@ -89,6 +89,9 @@ class Chat:
         >>> calculation = chat.send_message("What is the sum of 2+2?", temperature=0.0)  #calculate
         >>> '4' in calculation
         True
+        >>> _ = chat.send_message("Write a .txt file in the doctest_examples folder with the title ex1, containing hello inside", temperature=0.0)
+        >>> 'doctest_examples/ex1.txt' in ls("doctest_examples")
+        True
         '''
         self.messages.append(
             {
