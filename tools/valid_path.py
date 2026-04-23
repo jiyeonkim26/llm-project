@@ -1,3 +1,6 @@
+'''
+Helper function that checks whether a path is an absolute path or '..'.
+'''
 import os
 
 

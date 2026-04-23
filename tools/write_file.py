@@ -1,6 +1,6 @@
-"""
+'''
 Defines a function that writes one file by calling write_files.
-"""
+'''
 from tools.write_files import write_files
 
 

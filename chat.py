@@ -65,6 +65,28 @@ class Chat:
         ]
 
     def send_message(self, message, temperature=0.8):
+        '''
+        Sends messages using tools when called.
+        >>> chat = Chat()
+        >>> reply = chat.send_message("Show me this file: doctest_examples/example.txt", temperature=0.0)  #cat
+        >>> 'hello world' in reply
+        True
+        >>> reply = chat.send_message("Search for 'hello' in doctest_examples/example.txt", temperature=0.0)  #grep
+        >>> 'hello' in reply
+        True
+        >>> _ = chat.send_message("Write a file doctest_examples/test.txt with hello", temperature=0.0)  #writefile
+        >>> cat("doctest_examples/test.txt")
+        'hello'
+        >>> _ = chat.send_message("Delete doctest_examples/test.txt", temperature=0.0)  #rm
+        >>> rm("doctest_examples/test.txt")
+        'No files matched.'
+        >>> reply = chat.send_message("List files in the tools directory", temperature=0.0)  #ls
+        >>> 'rm.py' in reply
+        True
+        >>> test_reply = chat.send_message("Run doctests on tools/cat.py and return doctest output", temperature=0.0)  #doctests
+        >>> 'failed.' in test_reply
+        False
+        '''
         self.messages.append(
             {
                 # system: never change; user: changes a lot

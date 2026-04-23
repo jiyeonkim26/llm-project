@@ -1,4 +1,4 @@
-# Building an LLM
+# LLM Agent
 
 <img src="https://github.com/jiyeonkim26/llm-project/actions/workflows/doctest.yaml/badge.svg?branch=agent" /> <img src="https://github.com/jiyeonkim26/llm-project/actions/workflows/integration.yaml/badge.svg?branch=agent" /> <img src="https://github.com/jiyeonkim26/llm-project/actions/workflows/flake8.yaml/badge.svg?branch=agent" />
 [![PyPI version](https://img.shields.io/pypi/v/cmc-csci040-JiyeonKim)](https://pypi.org/project/cmc-csci040-JiyeonKim/)
