@@ -17,6 +17,12 @@ def valid_path(path):
     False
     >>> valid_path("foo/../bar.txt")
     False
+    >>> valid_path(None)
+    False
+    >>> valid_path(123)
+    False
+    >>> valid_path("")
+    False
     """
     if not isinstance(path, str) or not path:
         return False
