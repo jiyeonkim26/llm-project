@@ -59,3 +59,40 @@ def write_files(files, commit_message):
         repo.index.commit(full_message)
 
         return f"Wrote {len(files)} file(s) and committed with message '{full_message}'"
+
+
+tool_schema = {
+    "type": "function",
+    "function": {
+        "name": "write_files",
+        "description": "Write multiple files and commit them in a single git commit.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "files": {
+                    "type": "array",
+                    "description": "List of files to write. Each file must include a path and contents.",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "path": {
+                                "type": "string",
+                                "description": "Relative file path to write."
+                            },
+                            "contents": {
+                                "type": "string",
+                                "description": "Contents to write into the file."
+                            }
+                        },
+                        "required": ["path", "contents"]
+                    }
+                },
+                "commit_message": {
+                    "type": "string",
+                    "description": "Commit message describing the changes."
+                }
+            },
+            "required": ["files", "commit_message"]
+        }
+    }
+}

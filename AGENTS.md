@@ -1,20 +1,19 @@
-# Sample AGENTS.md file
+# AGENTS.md
 
 ## Dev environment tips
-- Use `pnpm dlx turbo run where <project_name>` to jump to a package instead of scanning with `ls`.
-- Run `pnpm install --filter <project_name>` to add the package to your workspace so Vite, ESLint, and TypeScript can see it.
-- Use `pnpm create vite@latest <project_name> -- --template react-ts` to spin up a new React + Vite package with TypeScript checks ready.
-- Check the name field inside each package's package.json to confirm the right name—skip the top-level one.
+- Create and activate a virtual environment before working on the project.
+- Install dependencies with `pip install -e .` or `pip install -r requirements.txt`.
+- Run the chat tool with `chat` after installation, or `python chat.py` during development.
+- Tool modules live in `tools/` and should expose both the tool function and `tool_schema`.
+- Store `GROQ_API_KEY` in environment variables or `.env`, never in committed files.
 
 ## Testing instructions
-- Find the CI plan in the .github/workflows folder.
-- Run `pnpm turbo run test --filter <project_name>` to run every check defined for that package.
-- From the package root you can just call `pnpm test`. The commit should pass all tests before you merge.
-- To focus on one step, add the Vitest pattern: `pnpm vitest run -t "<test name>"`.
-- Fix any test or type errors until the whole suite is green.
-- After moving files or changing imports, run `pnpm lint --filter <project_name>` to be sure ESLint and TypeScript rules still pass.
-- Add or update tests for the code you change, even if nobody asked.
+- Run doctests with `pytest --doctest-modules`.
+- Run coverage with `pytest --cov=chat --cov=tools --cov-branch --cov-report=term-missing`.
+- If configured, run lint checks before committing.
+- Add or update doctests/tests whenever you modify a tool or chat behavior.
 
 ## PR instructions
-- Title format: [<project_name>] <Title>
-- Always run `pnpm lint` and `pnpm test` before committing.
+- Title format: [chat] <Title>
+- Ensure tests and doctests pass before committing.
+- Commit changes with clear messages, especially when updating tools or schemas.

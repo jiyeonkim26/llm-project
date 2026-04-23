@@ -36,3 +36,22 @@ def valid_path(path):
         return False
 
     return True
+
+
+tool_schema = {
+    "type": "function",
+    "function": {
+        "name": "valid_path",
+        "description": "Check whether a given file path is safe to use. A valid path is not absolute and does not contain directory traversal like '..'.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "path": {
+                    "type": "string",
+                    "description": "The file path to validate."
+                }
+            },
+            "required": ["path"]
+        }
+    }
+}

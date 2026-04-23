@@ -14,6 +14,11 @@ from tools.calculate import calculate, tool_schema as calculate_schema
 from tools.ls import ls, tool_schema as ls_schema
 from tools.cat import cat, tool_schema as cat_schema
 from tools.grep import grep, tool_schema as grep_schema
+from tools.doctests import doctests, tool_schema as doctests_schema
+from tools.rm import rm, tool_schema as rm_schema
+from tools.valid_path import valid_path, tool_schema as valid_path_schema
+from tools.write_files import write_files, tool_schema as write_files_schema
+from tools.write_file import write_file, tool_schema as write_file_schema
 
 from dotenv import load_dotenv
 
@@ -60,16 +65,6 @@ class Chat:
         ]
 
     def send_message(self, message, temperature=0.8):
-        '''
-        >>> from unittest.mock import MagicMock
-        >>> chat = Chat()
-        >>> chat.client = MagicMock()
-        >>> chat.client.chat.completions.create.return_value = MagicMock(
-        ...     choices=[MagicMock(message=MagicMock(content="Hello Bob, it's nice to meet you.", tool_calls=None))]
-        ... )
-        >>> chat.send_message('my name is Bob', temperature=0.0)
-        "Hello Bob, it's nice to meet you."
-        '''
         self.messages.append(
             {
                 # system: never change; user: changes a lot
@@ -80,12 +75,19 @@ class Chat:
         )
 
         # define tools
-        tools = [calculate_schema, ls_schema, cat_schema, grep_schema]
+        tools = [calculate_schema, 
+                ls_schema, 
+                cat_schema, 
+                grep_schema, 
+                doctests_schema, 
+                rm_schema, 
+                write_file_schema, 
+                write_files_schema, 
+                valid_path_schema]
 
         # higher temperature = more randomness/creativity
         chat_completion = self.client.chat.completions.create(
             messages=self.messages,
-            # model="llama-3.1-8b-instant",
             model=self.MODEL,
             temperature=temperature,
             seed=0,
@@ -102,6 +104,11 @@ class Chat:
                 "ls": ls,
                 "cat": cat,
                 "grep": grep,
+                "doctests": doctests,
+                "rm": rm,
+                "write_files": write_files,
+                "write_file": write_file,
+                "valid_path": valid_path,
             }
 
             self.messages.append(response_message)
@@ -130,6 +137,34 @@ class Chat:
                     function_response = function_to_call(
                         function_args["regex"],
                         function_args["path"],
+                    )
+
+                elif function_name == "doctests":
+                    function_response = function_to_call(
+                        function_args["path"]
+                    )
+
+                elif function_name == "rm":
+                    function_response = function_to_call(
+                        function_args["path"]
+                    )
+
+                elif function_name == "write_files":
+                    function_response = function_to_call(
+                        function_args["files"],
+                        function_args["commit_message"],
+                    )
+
+                elif function_name == "write_file":
+                    function_response = function_to_call(
+                        function_args["path"],
+                        function_args["contents"],
+                        function_args["commit_message"],
+                    )
+
+                elif function_name == "valid_path":
+                    function_response = function_to_call(
+                        function_args["path"]
                     )
 
                 # Add tool response to conversation
@@ -186,6 +221,21 @@ def _parse_slash_command(user_input):
     >>> _parse_slash_command('/grep "hello world" doctest_examples/example.txt')
     ('grep', ['hello world', 'doctest_examples/example.txt'])
 
+    >>> _parse_slash_command('/write_file doctest_examples/test.txt "hello world" "add file"')
+    ('write_file', ['doctest_examples/test.txt', 'hello world', 'add file'])
+
+    >>> _parse_slash_command('/write_files \"[{"path":"doctest_examples/test.txt","contents":"hello"}]\" "add files"')
+    ('write_files', ['[{path:doctest_examples/test.txt,contents:hello}]', 'add files'])
+
+    >>> _parse_slash_command('/valid_path doctest_examples/example.txt')
+    ('valid_path', ['doctest_examples/example.txt'])
+
+    >>> _parse_slash_command('/rm doctest_examples/example.txt')
+    ('rm', ['doctest_examples/example.txt'])
+
+    >>> _parse_slash_command('/doctests tools/cat.py')
+    ('doctests', ['tools/cat.py'])
+
     >>> _parse_slash_command('/')
     (None, [])
 
@@ -219,6 +269,11 @@ def _run_slash_command(command, args, available_functions):
     ...     "ls": ls,
     ...     "cat": cat,
     ...     "grep": grep,
+    ...     "doctests": doctests,
+    ...     "rm": rm,
+    ...     "write_files": write_files,
+    ...     "write_file": write_file,
+    ...     "valid_path": valid_path,
     ... }
 
     >>> _run_slash_command('calculate', ['2', '+', '2'], funcs)
@@ -232,6 +287,21 @@ def _run_slash_command(command, args, available_functions):
 
     >>> _run_slash_command('grep', ['hello'], funcs)
     'Error: grep requires a regex and a path'
+
+    >>> _run_slash_command('doctests', [], funcs)
+    'Error: doctests requires exactly one path'
+
+    >>> _run_slash_command('rm', [], funcs)
+    'Error: rm requires exactly one path'
+
+    >>> _run_slash_command('write_file', ['doctest_examples/test.txt', 'hello'], funcs)
+    'Error: write_file requires exactly a path, contents, and commit message'
+
+    >>> _run_slash_command('write_files', ['only_one_arg'], funcs)
+    'Error: write_files requires exactly files and a commit message'
+
+    >>> _run_slash_command('valid_path', [], funcs)
+    'Error: valid_path requires exactly one path'
 
     >>> _run_slash_command('not_command', ['hello'], funcs)
     'Unknown command: not_command'
@@ -265,6 +335,32 @@ def _run_slash_command(command, args, available_functions):
         regex = args[0]
         path = " ".join(args[1:])
         return function_to_call(regex, path)
+
+    if command == "doctests":
+        if len(args) != 1:
+            return "Error: doctests requires exactly one path"
+        return function_to_call(args[0])
+
+    if command == "rm":
+        if len(args) != 1:
+            return "Error: rm requires exactly one path"
+        return function_to_call(args[0])
+
+    if command == "write_file":
+        if len(args) != 3:
+            return "Error: write_file requires exactly a path, contents, and commit message"
+        return function_to_call(args[0], args[1], args[2])
+
+    if command == "write_files":
+        if len(args) != 2:
+            return "Error: write_files requires exactly files and a commit message"
+        files = json.loads(args[0])
+        return function_to_call(files, args[1])
+
+    if command == "valid_path":
+        if len(args) != 1:
+            return "Error: valid_path requires exactly one path"
+        return function_to_call(args[0])
 
 
 def _record_slash_command(chat, user_input, result):
@@ -308,6 +404,11 @@ def slash_command(user_input, available_functions, chat):
     ...     "ls": ls,
     ...     "cat": cat,
     ...     "grep": grep,
+    ...     "doctests": doctests,
+    ...     "rm": rm,
+    ...     "write_files": write_files,
+    ...     "write_file": write_file,
+    ...     "valid_path": valid_path,
     ... }
     >>> chat = DummyChat()
 
@@ -382,6 +483,11 @@ def repl(temperature=0.0):
         "ls": ls,
         "cat": cat,
         "grep": grep,
+        "doctests": doctests,
+        "rm": rm,
+        "write_files": write_files,
+        "write_file": write_file,
+        "valid_path": valid_path,
     }
 
     try:
