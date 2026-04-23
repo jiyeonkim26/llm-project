@@ -86,6 +86,9 @@ class Chat:
         >>> test_reply = chat.send_message("Run doctests on doctest_examples/test.py and return exact doctest output", temperature=0.0)  #doctests
         >>> 'Test passed.' in test_reply
         True
+        >>> calculation = chat.send_message("What is the sum of 2+2?", temperature=0.0)  #calculate
+        >>> '4' in calculation
+        True
         '''
         self.messages.append(
             {
