@@ -84,8 +84,8 @@ class Chat:
         >>> 'rm.py' in reply
         True
         >>> test_reply = chat.send_message("Run doctests on tools/cat.py and return doctest output", temperature=0.0)  #doctests
-        >>> 'failed.' in test_reply
-        False
+        >>> 'Test passed.' in test_reply
+        True
         '''
         self.messages.append(
             {
