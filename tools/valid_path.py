@@ -1,5 +1,6 @@
 import os
 
+
 def valid_path(path):
     """
     Returns True if path is safe to use.
