@@ -89,8 +89,11 @@ class Chat:
         >>> calculation = chat.send_message("What is the sum of 2+2?", temperature=0.0)  #calculate
         >>> '4' in calculation
         True
-        >>> _ = chat.send_message("Write a .txt file in the doctest_examples folder with the title ex1, containing hello inside", temperature=0.0)
-        >>> 'doctest_examples/ex1.txt' in ls("doctest_examples")
+        >>> _ = chat.send_message("Write 2 .txt files in the doctest_examples folder with the title ex1 and ex2, containing hello inside", temperature=0.0)  #writefiles
+        >>> 'doctest_examples/ex1.txt' and 'doctest_examples/ex2.txt' in ls("doctest_examples")
+        True
+        >>> description = chat.send_message("describe what the valid path tool does", temperature=0.0) #valid_path
+        >>> 'valid_path' in description
         True
         '''
         self.messages.append(
