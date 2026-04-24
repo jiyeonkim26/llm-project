@@ -1,7 +1,7 @@
 # LLM Agent
 
 <img src="https://github.com/jiyeonkim26/llm-project/actions/workflows/doctest.yaml/badge.svg?branch=agent" /> <img src="https://github.com/jiyeonkim26/llm-project/actions/workflows/integration.yaml/badge.svg?branch=agent" /> <img src="https://github.com/jiyeonkim26/llm-project/actions/workflows/flake8.yaml/badge.svg?branch=agent" />
-[![PyPI version](https://img.shields.io/pypi/v/cmc-csci040-JiyeonKim)](https://pypi.org/project/cmc-csci040-JiyeonKim/)
+[![PyPI version](https://img.shields.io/pypi/v/cmc-csci040-JiyeonKim?cache=bypass)](https://pypi.org/project/cmc-csci040-JiyeonKim/?cache=bypass)
 [![codecov](https://codecov.io/github/jiyeonkim26/llm-project/branch/agent/graph/badge.svg?token=B5QEXH1O6I)](https://codecov.io/github/jiyeonkim26/llm-project)
 
 This is a command-line chatbot that maintains simple conversational context. This project uses GROQ to create a text-based AI assistant. 
