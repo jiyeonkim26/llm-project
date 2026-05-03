@@ -12,7 +12,8 @@ parser.add_argument("--url")
 parser.add_argument("--apikey")
 parser.add_argument("--model", default='llama-3.1-8b-instant')
 parser.add_argument("--port", type=int, default=7860)
-args = parser.parse_args()
+if __name__ == "__main__":
+    args = parser.parse_args()
 
 client = OpenAI(base_url=args.url, api_key=args.apikey)
 
