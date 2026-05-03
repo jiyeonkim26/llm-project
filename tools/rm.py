@@ -1,6 +1,6 @@
-"""
+'''
 Removes one or more files using glob pattern and commits the deletion to git.
-"""
+'''
 import os
 import glob
 from git import Repo
